@@ -1,46 +1,94 @@
-# Getting Started with Create React App
+## Тестовое задание "Редактор параметров"
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Основное задание
 
-## Available Scripts
+Есть следующие структуры данных, описывающие товар:
+ * интерфейс `Model`
+ * набор параметров товара `Param[]`
+ 
+Необходимо реализовать на [![React][React.js]][React-url] компоненты, которые позволяют редактировать структуру `Model`:
+ - проставлять значения параметров 
+ - при этом параметры должны выводиться все
+ - параметры сразу должны быть доступны для редактирования
+ - переданные значения в структуре проставлены в форме редактирования, которые передаются в `params: Param[]`
+ - переданные значения так же позволяют получить полную структуру в методе `getModel()` – содержащую все проставленные значения параметров. 
+  
+Решение должно быть легко расширяемым (например, позволять легко добавлять новые типы параметров – не только текстовые, но, например, числовые или со списком значений). Ваша реализация должна работать только с текстовыми параметрами `Input` – тип `string`.
 
-In the project directory, you can run:
+Решение необходимо оформить в виде одного файла со всеми компонентами и типами которые используются.
 
-### `npm start`
+```ts
+interface Param {
+   id: number;
+   name: string;
+   type: ‘string’;
+}
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+interface ParamValue {
+    paramId: number;
+    value: string;
+}
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+interface Model {
+    paramValues: ParamValue[];
+    colors: Color[];
+}
 
-### `npm test`
+interface Props {
+    params: Param[];
+    model: Model;
+}
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+class ParamEditor extends React.Component<Props, State> {
+    public getModel(): Model {
+    }
+}
+```
 
-### `npm run build`
+Пример структуры:
+ * params:
+    ```json
+    [
+        {
+            "id": 1,
+            "name": "Назначение"
+        },
+        {
+            "id": 2,
+            "name": "Длина"
+        }
+    ]
+    ```
+ * model:
+    ```json
+    {
+        "paramValues": [
+            {
+            "paramId": 1,
+            "value": "повседневное"
+            },
+            {
+            "paramId": 2,
+            "value": "макси"
+            }
+        ] 
+    }
+    ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Пример, как должен выглядеть редактор для указанных моделей:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+![Example Screen Shot][example-img]
 
-### `npm run eject`
+### Дополнительно
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+По личной инициативе дополнительно реализовано:
+* Создание новых параметров и их начальных значений
+* Имитация получения данных с сервера (с помощью `Promise`)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<!-- MARKDOWN LINKS & IMAGES -->
+[example-img]: /example_img.png
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+###### Есть следующие структуры данных, описывающих товар – интерфейс Model и набор параметров этого товара. Необходимо реализовать на React компоненты, которые позволяют редактировать структуру Model – проставлять значения параметров при этом параметры должны выводиться все и сразу должны быть доступны для редактирования, а переданные значения в структуре проставлены в форме редактирования, которые передаются в params: Param[], а так же позволяют получить полную структуру в методе getModel() – содержащую все проставленные значения параметров. Решение должно быть легко расширяемым (например, позволять легко добавлять новые типы параметров – не только текстовые, но например числовые или со списком значений) Ваша реализация должна работать только с текстовыми параметрами Input – тип string.
