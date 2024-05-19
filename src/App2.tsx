@@ -7,7 +7,7 @@ import "./App.css";
 // Укажите правильные типы.
 // По возможности пришлите Ваш вариант в https://codesandbox.io
 
-import React, { useState, useEffect, useRef, useMemo, memo, useCallback } from "react";
+import React, { useState, useEffect, useRef, memo, useCallback } from "react";
 
 const URL = "https://jsonplaceholder.typicode.com/users";
 
@@ -90,9 +90,22 @@ function useThrottle<T>(value: T, interval = 500): T {
     return throttledValue;
 };
 
+const getRandomUser = (id: number): Promise<IUser> => {
+    return fetch(`${URL}/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error occurred!')
+            }
+            return response.json()
+        })
+        .catch(err => {
+            console.log("request error:", err)
+        })
+}
+
 function App(): JSX.Element {
-    const [item, setItem] = useState<Nullable<IUser>>(null);
-    const throttledValue = useThrottle(item);
+    const [user, setUser] = useState<Nullable<IUser>>(null); // смысловая нагрузка в названии переменной
+    const throttledValue = useThrottle(user);
 
     const receiveRandomUser = async () => {
         const id: number = Math.floor(Math.random() * (10 - 1)) + 1;
@@ -100,14 +113,15 @@ function App(): JSX.Element {
         const LSData: string | null = localStorage.getItem(LSKey);
         if (LSData) {
             const _user = JSON.parse(LSData) as IUser;
-            setItem(_user);
+            setUser(_user);
         }
         else {
-            console.log("- send request")
-            const response: Response = await fetch(`${URL}/${id}`);
-            const _user = (await response.json()) as IUser;
-            localStorage.setItem(LSKey, JSON.stringify(_user))
-            setItem(_user);
+            getRandomUser(id).then(response => {
+                setUser(response)
+                localStorage.setItem(LSKey, JSON.stringify(response))
+            }).catch(err => {
+                console.log("Error", err)
+            })
         }
     };
 
@@ -120,7 +134,7 @@ function App(): JSX.Element {
         receiveRandomUser();
     }, []);
 
-    console.log("render App")
+    // console.log("render App", user)
     return (
         <div>
             <header>Get a random user</header>
