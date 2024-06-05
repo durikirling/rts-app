@@ -4,11 +4,13 @@
 ###### (Навигация работает, если выбранный пункт развернут)
 * [? - "Редактор параметров"](#тестовое-задание-редактор-параметров)
 * [ABCP IT - "Анализ кода"](#тестовое-задание-анализ-кода)
+* [Mindbox IT - "ToDo-приложение"](#тестовое-задание-todo-приложение)
 
 | № |Компания|Задание| |
-|:-:|:------:|-------|-|
+|:-:|:------:|:-------:|-|
 | 1 | ?      |"Редактор параметров"|[перейти](#тестовое-задание-редактор-параметров)|
 | 2 | ABCP IT|"Анализ кода"|[перейти](#тестовое-задание-анализ-кода)|
+| 3 | Mindbox IT|"ToDo-приложение"|[перейти](#тестовое-задание-todo-приложение)|
 
 ___
 
@@ -112,13 +114,15 @@ class ParamEditor extends React.Component<Props, State> {
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [date-x]: https://img.shields.io/badge/Дата_выполнения-15.05.2024-x
-[example-img]: /example_img.png
+[example-img]: /imgForReadme/example_img.png
 [React.js]: https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB
  <!-- style : [flat, flat-square, plastic, for-the-badge, social] -->
 [React-url]: https://reactjs.org/
 [company-x]: https://img.shields.io/badge/Компания--blue
 
 >###### Есть следующие структуры данных, описывающих товар – интерфейс Model и набор параметров этого товара. Необходимо реализовать на React компоненты, которые позволяют редактировать структуру Model – проставлять значения параметров при этом параметры должны выводиться все и сразу должны быть доступны для редактирования, а переданные значения в структуре проставлены в форме редактирования, которые передаются в params: Param[], а так же позволяют получить полную структуру в методе getModel() – содержащую все проставленные значения параметров. Решение должно быть легко расширяемым (например, позволять легко добавлять новые типы параметров – не только текстовые, но например числовые или со списком значений) Ваша реализация должна работать только с текстовыми параметрами Input – тип string.
+
+[Вернуться к содержанию](#содержание)
 ___
 ___
 </details>
@@ -244,6 +248,58 @@ export default App;
 [abcp-url]: https://www.abcp.ru/
 [CodeSandbox]: https://img.shields.io/badge/CodeSandbox-black?style=flat&logo=CodeSandbox&logoColor=#151515
 [CodeSandbox-url]: https://codesandbox.io
+
+[Вернуться к содержанию](#содержание)
+___
+___
+</details>
+
+<details>
+<summary>
+    <b style="font-size: 16px">
+        Mindbox IT - "ToDo-приложение"
+    </b>
+</summary>
+
+## Тестовое задание "ToDo-приложение"
+ [![Mindbox IT][company-mindbox]][mindbox-url] 
+ ![Mindbox IT][date-mindbox]
+
+#### Тестовое задание Frontend junior в Mindbox 
+
+### Задача
+
+Сделайте ToDo-приложение, позволяющее управлять текущим списком дел.
+
+#### Что должно быть в интерфейсе:
+* Поле для ввода новой задачи
+* Списки всех задач, невыполненных и выполненных задач (по отдельности)
+
+### Пример внешнего вида приложения
+
+  ![Example ToDo-app Screen Shot][example-mindbox-todo]
+
+### Требования к коду
+* Приложение создано с использованием [![TypeScript][ts]][ts-url], [![React][React.js]][React-url] и [![ReactHooks][react-hooks]][react-hooks-url]
+* Библиотеки компонент – на ваше усмотрение
+* Ключевая на ваш взгляд функциональность обязательно покрыта тестами
+* Проект должен запускаться командой `npm i && npm run start`
+* Проект доступен на [![GitHubPages][github-pages]][github-pages-url] / [![Vercel][vercel]][vercel-url] / etc.
+
+[date-mindbox]: https://img.shields.io/badge/Дата_выполнения-05.06.2024-x
+[company-mindbox]: https://img.shields.io/badge/Компания-Mindbox%20IT-blue
+[mindbox-url]: https://mindbox.ru/
+[example-mindbox-todo]: /imgForReadme/example_mindbox_todo.png
+[ts]: https://img.shields.io/badge/TypeScript-20232A?style=flat&logo=typescript
+[ts-url]: https://www.typescriptlang.org/
+[react-hooks]: https://img.shields.io/badge/React%20Hooks-20232A?style=flat&logo=react&logoColor=61DAFB
+[react-hooks-url]: https://react.dev/reference/react/hooks
+[github-pages]: https://img.shields.io/badge/GitHub%20Pages-20232A?style=flat&logo=githubpages
+[github-pages-url]: https://pages.github.com/
+[vercel]: https://img.shields.io/badge/Vercel-20232A?style=flat&logo=vercel
+[vercel-url]: https://vercel.com/
+
+[Вернуться к содержанию](#содержание)
 ___
 ___
 </details>
