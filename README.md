@@ -287,7 +287,7 @@ ___
 * Проект должен запускаться командой `npm i && npm run start`
 * Проект доступен на [![GitHubPages][github-pages]][github-pages-url] / [![Vercel][vercel]][vercel-url] / etc.
 
-[date-mindbox]: https://img.shields.io/badge/Дата_выполнения-05.06.2024-x
+[date-mindbox]: https://img.shields.io/badge/Дата_выполнения-06.06.2024-x
 [company-mindbox]: https://img.shields.io/badge/Компания-Mindbox%20IT-blue
 [mindbox-url]: https://mindbox.ru/
 [example-mindbox-todo]: /imgForReadme/example_mindbox_todo.png
