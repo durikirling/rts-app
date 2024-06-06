@@ -3,7 +3,6 @@
   /* background-color: antiquewhite; */
   /* width: 100vw;
   height: 100vh; */
-
 }
 
 .editor {
@@ -20,7 +19,7 @@
   margin: 10px 0;
   padding: 5px;
   display: flex;
-  justify-content:flex-start;
+  justify-content: flex-start;
   text-align: center;
   gap: 10px;
   border-radius: 5px;
@@ -52,7 +51,7 @@
   border-radius: 5px;
   border: solid 1px black;
   animation-name: show;
-  animation-duration: .5s;
+  animation-duration: 0.5s;
   animation-timing-function: ease;
 }
 
@@ -121,7 +120,7 @@
   font-size: 80px;
   width: 100vw;
   height: 100vh;
-gap: 5px;
+  gap: 5px;
 }
 
 .s1 {
@@ -135,19 +134,281 @@ gap: 5px;
   background-color: palevioletred;
   border-radius: 5px;
   padding: 5px 5px;
-
 }
 .s3 {
   color: tomato;
   background-color: yellowgreen;
   border-radius: 5px;
   padding: 5px 5px;
-
 }
 .s4 {
   color: white;
   background-color: red;
   border-radius: 5px;
   padding: 5px 5px;
+}
 
+/* TODOS */
+
+.todos-app {
+  background-color: rgb(233, 233, 233);
+  /* padding: 10px; */
+  height: 100vh;
+  /* display: grid; */
+  /* grid-template-rows: min-content min-content; */
+  /* overflow: hidden;
+  max-height: 100vh; */
+}
+
+.todos-app * {
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+.todos-app header {
+  font-size: 100px;
+  text-align: center;
+  font-weight: 100;
+  color: palevioletred;
+  opacity: 0.25;
+}
+
+.todos-container {
+  background-color: white;
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 0 0 3px 1px grey;
+  /* overflow: hidden; */
+}
+
+.todos-container summary > input {
+  border: none;
+  height: 30px;
+  font-style: italic;
+  width: 100%;
+  padding: 10px 10px;
+  /* background-color: aqua; */
+  font-size: 18px;
+  font-weight: 300;
+}
+.todos-container summary > input:focus {
+  outline: none;
+}
+.todos-container summary > input::placeholder {
+  font-style: italic;
+}
+
+.summary-arrow {
+  margin: 10px 20px;
+  transform: rotate(0);
+  font-size: 25px;
+  color: grey;
+  font-weight: 300;
+  font-stretch: 200%;
+}
+
+.summary-arrow.open {
+  transform: rotate(90deg);
+}
+
+summary {
+  /* height: 50px; */
+  /* align-items: center;
+  justify-content: center; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &::marker {
+    color: grey;
+  }
+  
+}
+
+details[open] summary {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #666;
+}
+
+.submit-task-btn {
+  /* font-style: italic; */
+  font-size: 20px;
+  font-weight: 200;
+  margin: 0 10px;
+  padding: 8px;
+  border-radius: 100%;
+  border: 1px solid palevioletred;
+  color: palevioletred;
+  background-color: inherit;
+
+  &:hover {
+    background-color: rgb(255, 242, 245);
+  }
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.todos {
+  max-height: calc(100vh - 270px);
+  min-height: 45px;
+  overflow: auto;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.no-tasks {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  color: grey;
+}
+
+.task {
+  /* display: flex;
+  flex-direction: row;
+  gap: 10px; */
+  font-size: 20px;
+  font-weight: 300;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 5px 5px 10px;
+  /* width: 100%; */
+  /* width: calc(100vw - 150px); */
+  word-break: normal;
+  /* width: fit-content; */
+}
+
+.todos-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 10px 0 10px;
+}
+
+.todos-footer * {
+  font-family: "Roboto", sans-serif;
+  color: grey;
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.filter {
+  display: flex;
+  flex-direction: row;
+  /* gap: 10px; */
+
+  & > div {
+    padding: 5px;
+    border: 1px solid white;
+  }
+  & > div:hover,
+  .todos-footer > button:hover {
+    cursor: pointer;
+    color: pink;
+  }
+  & > div:active,
+  .todos-footer > button:active {
+    cursor: pointer;
+    color: rgb(255, 152, 170);
+  }
+}
+
+.selected-filter {
+  border: 1px pink solid !important;
+  border-radius: 5px;
+}
+
+.todos-footer > button {
+  border: none;
+  background-color: white;
+}
+
+.todos-app button:hover {
+  cursor: pointer;
+}
+
+.completed-task {
+  text-decoration: line-through;
+  color: lightgrey;
+}
+
+/* CUSTOM CHECKBOX */
+
+/* для элемента input c type="checkbox" */
+.custom-checkbox > input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+/* для элемента label, связанного с .custom-checkbox */
+.custom-checkbox > span {
+  display: inline-flex;
+  align-items: center;
+  user-select: none;
+  width: 100%;
+}
+
+.custom-checkbox > span:hover {
+  cursor: pointer;
+}
+
+/* создание в label псевдоэлемента before со следующими стилями */
+.custom-checkbox > span::before {
+  content: "";
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  flex-grow: 0;
+  border: 1px solid #adb5bd;
+  border-radius: 100%;
+  margin-right: 0.5em;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 50% 50%;
+}
+
+/* стили при наведении курсора на checkbox */
+.custom-checkbox > input:not(:disabled):not(:checked) + span:hover::before {
+  border-color: green;
+}
+
+/* стили для активного чекбокса (при нажатии на него) */
+.custom-checkbox > input:not(:disabled):active + span::before {
+  background-color: green;
+  border-color: green;
+}
+
+/* стили для чекбокса, находящегося в фокусе */
+.custom-checkbox > input:focus + span::before {
+  box-shadow: 0 0 0 0.2rem green;
+}
+
+/* стили для чекбокса, находящегося в фокусе и не находящегося в состоянии checked */
+.custom-checkbox > input:focus:not(:checked) + span::before {
+  border-color: green;
+  opacity: 0.2;
+}
+
+/* стили для чекбокса, находящегося в состоянии checked */
+.custom-checkbox > input:checked + span::before {
+  border-color: green;
+  /* background-color: #0bef29; */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='green' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+}
+
+/* стили для чекбокса, находящегося в состоянии disabled */
+.custom-checkbox > input:disabled + span::before {
+  background-color: #e9ecef;
 }
