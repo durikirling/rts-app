@@ -1,23 +1,5 @@
 import "./App.css";
-import React, { useState, ReactElement } from "react";
-
-const Todos: ITask[] = [
-  {
-    id: 1,
-    text: "Just do it",
-    statusId: 0,
-  },
-  {
-    id: 2,
-    text: "Just do it 2",
-    statusId: 1,
-  },
-  {
-    id: 3,
-    text: "Just do it 3",
-    statusId: 0,
-  },
-];
+import React, { useState, ReactElement, useEffect } from "react";
 
 const TaskStatuses: ITaskStatus[] = [
   {
@@ -57,40 +39,110 @@ FilterValues.unshift(AllFilterValue);
 // type FilterValues = "All" | TodoStatusNames;
 
 interface ITaskProps {
-  data: ITask;
+  taskData: ITask;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Task: React.FC<ITaskProps> = ({ data, onChange }): ReactElement => {
+const addDataIntoCache = <T,>(cacheName: string, url: string, response: T) => {
+  const data = new Response(JSON.stringify(response));
+  if ("caches" in window) {
+    window.caches.open(cacheName).then((cache) => {
+      cache.put(url, data);
+    });
+  }
+};
+
+const getDataFromCache = <T,>(
+  cacheName: string,
+  url: string
+): Promise<T> | null => {
+  if ("caches" in window) {
+    return caches
+      .open(cacheName)
+      .then((cache) => cache.match(url).then((res) => res?.json()));
+  }
+  return null;
+};
+
+const Task: React.FC<ITaskProps> = ({ taskData, onChange }): ReactElement => {
   return (
-    <>
-      <div key={data.id} className="task">
-        <label className="custom-checkbox">
-          <input
-            checked={data.statusId === 1 ? true : false}
-            type="checkbox"
-            onChange={onChange}
-          />
-          <span className={data.statusId === 1 ? "completed-task" : ""}>
-            {data.text}
-          </span>
-        </label>
-      </div>
-    </>
+    <li key={taskData.id} className="task">
+      <label className="custom-checkbox">
+        <input
+          checked={taskData.statusId === 1 ? true : false}
+          type="checkbox"
+          onChange={onChange}
+        />
+        <span className={taskData.statusId === 1 ? "completed-task" : ""}>
+          {taskData.text}
+        </span>
+      </label>
+    </li>
   );
 };
 
 function App(): JSX.Element {
-  const [todos, setTodos] = useState<ITask[]>(Todos);
+  const [todos, setTodos] = useState<ITask[]>([]);
+  const setTodosCustom = (data: ITask[]) => {
+    addDataIntoCache("todos", "todos_url", data);
+    setTodos(data);
+  };
+
   const [activeFilter, setActiveFilter] =
     useState<TodoStatusNames>(AllFilterValue);
+  const setActiveFilterCustom = (status: TodoStatusNames) => {
+    setActiveFilter(status);
+    addDataIntoCache("filter", "filter_url", status);
+  };
+
   const [newTaskText, setNewTaskText] = useState<string>("");
   const [isSummaryOpen, setIsSummaryOpen] = useState<boolean>(true);
+
+  useEffect(() => {
+    getDataFromCache<ITask[]>("todos", "todos_url")?.then((res) => {
+      if (res) setTodos(res);
+    });
+    getDataFromCache<TodoStatusNames>("filter", "filter_url")?.then((res) => {
+      if (res) setActiveFilter(res);
+    });
+  }, []);
 
   const countLeft: number = todos.reduce(
     (accum, task) => (task.statusId === 0 ? accum + 1 : accum),
     0
   );
+
+  const onToggleOfDetails = (e: React.ChangeEvent<HTMLDetailsElement>) => {
+    setIsSummaryOpen(e.currentTarget.open);
+  };
+
+  const onKeyUpOfSummary = (e: React.KeyboardEvent<HTMLDetailsElement>) => {
+    if (e.code === "Space" || e.keyCode === 32)
+      e.preventDefault(); // don't expand\collapse details
+    else if (e.key === "Enter") createTask();
+  };
+
+  const onInputNewTask = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    setNewTaskText(e.target.value);
+  };
+
+  const onClickSaveButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    createTask();
+  };
+
+  const createTask = () => {
+    if (newTaskText.replace(/ +(?= )/g, "").replace(/\s/g, "") === "") return;
+    const id = todos[todos.length - 1]?.id ?? 0;
+    todos.push({
+      id: id + 1,
+      text: newTaskText,
+      statusId: 0,
+    });
+    setTodosCustom(todos);
+    setNewTaskText("");
+    setIsSummaryOpen(true);
+  };
 
   const completeTask = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -106,42 +158,11 @@ function App(): JSX.Element {
         else return item;
       }),
     ];
-    setTodos(newTodos);
-  };
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTaskText(e.target.value);
-  };
-
-  const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key == "Enter") {
-      createTask();
-    }
-  };
-
-  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    createTask();
-  };
-
-  const onToggle = (e: React.ChangeEvent<HTMLDetailsElement>) => {
-    setIsSummaryOpen(e.currentTarget.open);
-  };
-
-  const createTask = () => {
-    if (newTaskText === "") return;
-    const id = todos[todos.length - 1]?.id ?? 0;
-    todos.push({
-      id: id + 1,
-      text: newTaskText,
-      statusId: 0,
-    });
-    setTodos(todos);
-    setNewTaskText("");
-    setIsSummaryOpen(true);
+    setTodosCustom(newTodos);
   };
 
   const deleteCompletedTask = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setTodos(todos.filter((task) => task.statusId !== 1));
+    setTodosCustom(todos.filter((task) => task.statusId !== 1));
   };
 
   return (
@@ -150,29 +171,31 @@ function App(): JSX.Element {
       <details
         className="todos-container"
         open={isSummaryOpen}
-        onToggle={onToggle}
+        onToggle={onToggleOfDetails}
       >
-        <summary>
-          <div className={"summary-arrow" + (isSummaryOpen ? " open" : "")}>{">"}</div>
+        <summary onKeyUp={onKeyUpOfSummary}>
+          <div className={"summary-arrow" + (isSummaryOpen ? " open" : "")}>
+            {">"}
+          </div>
           <input
             value={newTaskText}
             placeholder="What needs to be done?"
-            onChange={onChange}
-            onKeyDown={onKeyDown}
+            onChange={onInputNewTask}
             title={"Press 'Enter' to confirm"}
           />
           {newTaskText && (
-            <button className="submit-task-btn" onClick={onClick}>
+            <button className="submit-task-btn" onClick={onClickSaveButton}>
               OK
             </button>
           )}
         </summary>
-        <div className="todos">
-          {todos.length < 1 ? (
-            //   <div className="no-tasks">No tasks</div>
-            <></>
-          ) : (
-            todos.map((task) => {
+        {/* <div className="todos"> */}
+        {todos.length < 1 ? (
+          //   <div className="no-tasks">No tasks</div>
+          <></>
+        ) : (
+          <ul className="todos">
+            {todos.map((task) => {
               const statusName: string | undefined = TaskStatuses.find(
                 (item) => item.id === task.statusId
               )?.name;
@@ -183,16 +206,17 @@ function App(): JSX.Element {
                 return (
                   <Task
                     key={task.id}
-                    data={task}
+                    taskData={task}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       completeTask(e, task)
                     }
                   />
                 );
-              }
-            })
-          )}
-        </div>
+              } else return null;
+            })}
+          </ul>
+        )}
+        {/* </div> */}
         <div className="todos-footer">
           <span>{countLeft} item left</span>
           <div className="filter">
@@ -200,7 +224,7 @@ function App(): JSX.Element {
               <div
                 key={status}
                 className={activeFilter === status ? "selected-filter" : ""}
-                onClick={() => setActiveFilter(status)}
+                onClick={() => setActiveFilterCustom(status)}
               >
                 {status}
               </div>
