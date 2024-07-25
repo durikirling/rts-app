@@ -154,6 +154,7 @@
   background-color: rgb(233, 233, 233);
   /* padding: 10px; */
   height: 100vh;
+  min-width: 300px;
   /* display: grid; */
   /* grid-template-rows: min-content min-content; */
   /* overflow: hidden;

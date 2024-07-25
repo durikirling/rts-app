@@ -42,6 +42,8 @@ interface Resolve<T> {
   data: T
 }
 
+type Nullable<T> = T | null | undefined;
+
 const getData = <T,>(data: T): Promise<Resolve<T>> => new Promise<Resolve<T>>(resolve => {
   // fake server request
   // with generic example
@@ -122,9 +124,9 @@ class ParamEditor extends React.Component<Props, State> {
   };
 };
 
-function App() {
-  const [model, setModel] = useState<Model | undefined>()
-  const [params, setParams] = useState<Param[] | undefined>() // <Param[]> ==> <Array<Param>>
+function App(): JSX.Element {
+  const [model, setModel] = useState<Nullable<Model>>()
+  const [params, setParams] = useState<Nullable<Param[]>>() // <Param[]> ==> <Array<Param>>
   // const [isDataLoaded, setIsDataLoaded] = useState<Boolean>(false)
 
   useEffect(() => {
